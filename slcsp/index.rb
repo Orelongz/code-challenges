@@ -20,11 +20,11 @@ class SLCSP
     read_csv_file(plans_csv_file) do |row|
       if (Hash[row]['metal_level'] == 'Silver')
         data = Hash[row]
-        if (@silver_plans[data['rate_area']])
-          @silver_plans[data['rate_area']] << data['rate']
-        else
-          @silver_plans[data['rate_area']] = [data['rate']]
+        unless @silver_plans[data['rate_area']]
+          @silver_plans[data['rate_area']] = []
         end
+
+        @silver_plans[data['rate_area']] << data['rate']
       end
     end
   end
@@ -33,7 +33,7 @@ class SLCSP
     zip_csv_file = "zips.csv"
     read_csv_file(zip_csv_file) do |row|
       data = Hash[row]
-      if (!@silver_plans[data['rate_area']].empty?)
+      unless @silver_plans[data['rate_area']].empty?
         @zips_result[data['zipcode']] = @silver_plans[data['rate_area']]
       end
     end
